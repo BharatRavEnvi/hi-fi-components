@@ -18,6 +18,7 @@ const CustomTab = ({ label, selectedTabId, currentTabId, ...rest }) => {
         },
 
         textDecoration: "none",
+        textTransform: "capitalize",
         flexGrow: "1",
         display: "flex",
         flexDirection: "column",

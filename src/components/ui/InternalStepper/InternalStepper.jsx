@@ -3,13 +3,13 @@ import React from "react";
 import CustomBadge from "../CustomBadge/CustomBadge";
 import { number } from "zod";
 
-const InternalStepper = ({ status, text, step = 0 }) => {
+const InternalStepper = ({ status, text, step = 0, onClick, ...rest }) => {
   // 3 status-> active, complete or
 
   const isActive = status === "active";
   const isCompleted = status === "completed";
-  const handleClick = () => {
-    // TODO: Implement navigation to the respective step
+  const handleClick = (e) => {
+    if (onClick) onClick(e);
   };
   return (
     <Box
