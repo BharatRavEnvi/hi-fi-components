@@ -12,10 +12,84 @@ import { DoneIcon } from "../../../assets/svgs/svg";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import BillingInfoForm from "../../forms/organizationDetails/BillingInfoForm";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DataInfo from "../DataInfo/DataInfo";
+import {
+  billingInfo,
+  contactInfo,
+  entityInfo,
+  basicDetailsInfo,
+} from "../../../configs/config";
+import EntityInfoForm from "../../forms/organizationDetails/EntityInfoForm";
+import ContactInfoForm from "../../forms/organizationDetails/ContactInfoForm";
+import BasicDetailsForm from "../../forms/organizationDetails/BasicDetailsForm";
 const OrganizationDetails = () => {
   const [selectedTab, setSelectedTab] = useState(1);
   const [selectedInfoTab, setSelectedInfoTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [basicDFD, setBasicDFD] = useState({
+    organizationLegalName: "",
+    abbreviatedName: "",
+    corporateIdentityNumber: "",
+    yearOfIncorporation: "",
+    industryType: [], //multiselect // data format -> {name:"",value:""}
+    natureOfOwnerShip: "", // single select
+    employmentTypes: [], //multiselect
+    numberOfEmployees: "",
+    financialYear: "", //date in range // data format  2023-2028
+    stockAndShares: "",
+    paidUpCapital: "", //price
+    pucCurrency: "rupee", //Note:-default currency, can be change based on origin, as of now im assuming it.
+    companyWebsite: "", //company website url
+    linkedIn: "", //linkedin url (optional: https:// or wwww.example.com)
+  }); //Note:-DFD refers to Details Form Data,
+  const [billingDFD, setBillingDFD] = useState({
+    postalAddress: {
+      addressLine1: "",
+      addressLine2: "",
+      country: "",
+      state: "",
+      city: "",
+      zipCode: "",
+    },
+    sameAsPostalAddress: "",
+    billingAddress: {
+      addressLine1: "",
+      addressLine2: "",
+      country: "",
+      state: "",
+      city: "",
+      zipCode: "",
+    },
+    mobileNumber: "",
+    billingContactNumber: "",
+  });
+  const [contactDFD, setContactDFD] = useState({
+    fullName: "",
+    email: "",
+    companyName: "",
+    mailingAddress: "",
+    contactNumber: "",
+    countryCode: "",
+    jobTitle: "",
+    officeFax: "",
+    linkedIn: "",
+    twitter: "",
+    sustainabilityBlog: "",
+    esgCertification: "",
+    csrInitiatives: "",
+  });
+  const [entityDFD, setEntityDFD] = useState([
+    {
+      entityName: "",
+      typeOfEntity: "",
+      dateOfIncorporation: "",
+      sharePercentage: "",
+      businessOperation: "",
+      mailAddress: "",
+      enableEmission: false, //true or false boolean value, default  false
+    },
+  ]); // im taking default 1 entity user can add many entity so that im using array of entity, to make it easy we(fellow developer) can make separate state
+
   const [orgSteps, setOrgSteps] = useState([
     {
       label: "Basic Details",
@@ -80,8 +154,72 @@ const OrganizationDetails = () => {
       alert("Can not do an action");
     }
   };
+  const renderFormForModal = () => {
+    switch (selectedInfoTab) {
+      case 0:
+        return (
+          <BasicDetailsForm
+            heading={orgSteps[selectedTab]?.heading}
+            para={orgSteps[selectedTab]?.para}
+            handleStepChange={handleStepChange}
+            setShowModal={setShowModal}
+            formData={basicDFD}
+            setFormData={setBasicDFD}
+          />
+        );
+      case 1:
+        return (
+          <BillingInfoForm
+            heading={orgSteps[selectedTab]?.heading}
+            para={orgSteps[selectedTab]?.para}
+            handleStepChange={handleStepChange}
+            setShowModal={setShowModal}
+            formData={billingDFD}
+            setFormData={setBillingDFD}
+          />
+        );
+      case 2:
+        return (
+          <ContactInfoForm
+            heading={orgSteps[selectedTab]?.heading}
+            para={orgSteps[selectedTab]?.para}
+            handleStepChange={handleStepChange}
+            setShowModal={setShowModal}
+            formData={contactDFD}
+            setFormData={setContactDFD}
+          />
+        );
+      case 3:
+        return (
+          <EntityInfoForm
+            heading={orgSteps[selectedTab]?.heading}
+            para={orgSteps[selectedTab]?.para}
+            handleStepChange={handleStepChange}
+            setShowModal={setShowModal}
+            formData={entityDFD}
+            setFormData={setEntityDFD}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        overflowY: "scroll",
+
+        "-ms-overflow-style": "none",
+
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       {selectedTab !== orgSteps?.length && (
         <Box
           sx={{
@@ -169,17 +307,7 @@ const OrganizationDetails = () => {
                 {`Add the ${orgSteps[selectedTab]?.label} of your organization. This will help us
               keep a track of your address.`}
               </Paragraph>
-              <CustomButton
-                onClick={handleButtonClick}
-                disableElevation
-                sx={{
-                  backgroundColor: "#203c25",
-                  width: "fit-content",
-                  blockSize: "fit-content",
-                  "&:hover": { backgroundColor: "#203c12" },
-                  textTransform: "capitalize",
-                }}
-              >
+              <CustomButton onClick={handleButtonClick} colorScheme='black'>
                 {`Add ${orgSteps[selectedTab]?.label}`}
               </CustomButton>
             </CustomBox>
@@ -213,7 +341,9 @@ const OrganizationDetails = () => {
               ))}
             </TabList>
           </Box>
-          <CustomBox>
+          <CustomBox
+            sx={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -230,28 +360,78 @@ const OrganizationDetails = () => {
                   handleButtonClick();
                   setSelectedTab(selectedInfoTab);
                 }}
-                disableElevation
-                sx={{
-                  width: "fit-content",
-                  color: "#2A7E3B",
-                  blockSize: "fit-content",
-
-                  textTransform: "capitalize",
-                }}
+                colorScheme='transparent'
               >
                 Edit
               </CustomButton>
             </Box>
           </CustomBox>
+          <CustomBox
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              backgroundColor: "white",
+            }}
+          >
+            {selectedInfoTab === 0
+              ? basicDetailsInfo?.map((item, idx) => {
+                  return (
+                    <DataInfo
+                      label={item?.label}
+                      key={idx}
+                      data={item?.value}
+                      type={item?.type}
+                    />
+                  );
+                })
+              : selectedInfoTab === 1
+                ? billingInfo?.map((item, idx) => {
+                    return (
+                      <DataInfo
+                        label={item?.label}
+                        key={idx}
+                        data={item?.value}
+                        type={item?.type}
+                      />
+                    );
+                  })
+                : selectedInfoTab === 2
+                  ? contactInfo?.map((item, idx) => (
+                      <DataInfo
+                        label={item?.label}
+                        key={idx}
+                        data={item?.value}
+                        type={item?.type}
+                      />
+                    ))
+                  : selectedInfoTab === 3
+                    ? entityInfo?.map((item, idx) => {
+                        let dataValue =
+                          item?.type === "heading"
+                            ? item?.value + " " + (idx + 1)
+                            : item?.value;
+                        return (
+                          <DataInfo
+                            label={item?.label}
+                            key={idx}
+                            data={dataValue}
+                            type={item?.type}
+                          />
+                        );
+                      })
+                    : ""}
+          </CustomBox>
         </TabContext>
       </CustomBox>
       <CustomModal open={showModal} handleClose={() => setShowModal(false)}>
-        <BillingInfoForm
+        {/* <BillingInfoForm
           heading={orgSteps[selectedTab]?.heading}
           para={orgSteps[selectedTab]?.para}
           handleStepChange={handleStepChange}
           setShowModal={setShowModal}
-        />
+        /> */}
+        {renderFormForModal()}
       </CustomModal>
     </Box>
   );

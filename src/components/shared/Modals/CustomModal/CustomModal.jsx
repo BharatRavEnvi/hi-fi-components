@@ -25,10 +25,10 @@ const CustomModal = ({ children, open, handleClose = () => {}, ...rest }) => {
         <Box
           sx={{
             bgcolor: "background.paper",
-            height: "85vh",
+            height: "98vh",
             overflowY: "scroll",
-            maxWidth: "98vw",
-            minWidth: "60vw",
+            maxWidth: "70vw",
+            minWidth: "70vw",
             marginY: "auto",
             borderRadius: "1rem",
             padding: "2rem",

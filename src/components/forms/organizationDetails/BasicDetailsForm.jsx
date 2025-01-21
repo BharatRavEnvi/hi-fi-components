@@ -7,12 +7,8 @@ import InputComponent from "../../ui/InputComponent/InputComponent";
 import CustomButton from "../../shared/Buttons/CustomButton/CustomButton";
 
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import {
-  billingFormConfig,
-  entityFormConfig,
-  entityInfo,
-} from "../../../configs/config";
-const BillingInfoForm = ({
+import { basicDetailsFormConfig } from "../../../configs/config";
+const BasicDetailsForm = ({
   heading,
   para,
   setShowModal = () => {},
@@ -21,43 +17,22 @@ const BillingInfoForm = ({
   setFormData,
 }) => {
   const [errors, setErrors] = useState({});
-  const [sameAsPostalAddress, setSameAsPostalAddress] = useState(
-    formData.sameAsPostalAddress || false
-  );
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     let updatedFormData = { ...formData };
-    console.log(name, value, type, checked);
-    if (name.startsWith("postalAddress") || name.startsWith("billingAddress")) {
-      const [addressType, field] = name.split(".");
-      updatedFormData = {
-        ...updatedFormData,
-        [addressType]: {
-          ...updatedFormData[addressType],
-          [field]: value,
-        },
-      };
-    } else if (name === "sameAsPostalAddress") {
-      setSameAsPostalAddress(checked);
-      if (checked) {
-        updatedFormData = {
-          ...updatedFormData,
-          [name]: checked,
-          billingAddress: { ...formData.postalAddress },
-        };
-      } else {
-        updatedFormData = {
-          ...updatedFormData,
-          [name]: checked,
-        };
-      }
+    console.log(name, value, checked, type);
+    if (name === "countryCode") {
+      updatedFormData = { ...updatedFormData, countryCode: value };
+    } else if (name === "phoneNumber") {
+      updatedFormData = { ...updatedFormData, phoneNumber: value };
     } else {
       updatedFormData = {
         ...updatedFormData,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: value,
       };
     }
-    console.log(formData);
+
+    console.log(updatedFormData);
     setFormData(updatedFormData);
   };
 
@@ -66,37 +41,22 @@ const BillingInfoForm = ({
     handleStepChange();
   };
   useEffect(() => {
-    if (sameAsPostalAddress) {
-      // If the checkbox is checked, copy postal address to billing address
-      setFormData((prevData) => ({
-        ...prevData,
-        billingAddress: { ...prevData.postalAddress },
-      }));
-    }
-  }, [sameAsPostalAddress, formData, setFormData]);
-
-  useEffect(() => {
     if (!formData) {
       setFormData({
-        postalAddress: {
-          postalAddressLine1: "",
-          postalAddressLine2: "",
-          postalCountry: "",
-          postalState: "",
-          postalCity: "",
-          postalZipCode: "",
-        },
-        sameAsPostalAddress: false,
-        billingAddress: {
-          addressLine1: "",
-          addressLine2: "",
-          country: "",
-          state: "",
-          city: "",
-          zipCode: "",
-        },
-        mobileNumber: "",
-        billingContactNumber: "",
+        organizationLegalName: "",
+        abbreviatedName: "",
+        corporateIdentityNumber: "",
+        yearOfIncorporation: "",
+        industryType: [], //multiselect // data format -> {name:"",value:""}
+        natureOfOwnerShip: "", // single select
+        employmentTypes: [], //multiselect
+        numberOfEmployees: "",
+        financialYear: "", //date in range // data format  2023-2028
+        stockAndShares: "",
+        paidUpCapital: "", //price
+        pucCurrency: "rupee", //Note:-default currency, can be change based on origin, as of now im assuming it.
+        companyWebsite: "", //company website url
+        linkedIn: "", //linkedin url (optional: https:// or wwww.example.com)
       });
     }
   }, [formData, setFormData]);
@@ -149,21 +109,11 @@ const BillingInfoForm = ({
         }}
       >
         <Grid container spacing={2}>
-          {billingFormConfig.map(
+          {basicDetailsFormConfig.map(
             (
               { key, label, type, required, placeholder, spanTwoColumns },
               idx
             ) => {
-              const getNestedValue = (formData, name) => {
-                return name
-                  .split(".")
-                  .reduce((acc, part) => (acc ? acc[part] : ""), formData);
-              };
-
-              const value = getNestedValue(formData, key) || "";
-              if (sameAsPostalAddress && key.startsWith("billingAddress")) {
-                return null;
-              }
               return (
                 <Grid item xs={12} md={spanTwoColumns ? 12 : 6} key={key}>
                   <InputComponent
@@ -172,7 +122,7 @@ const BillingInfoForm = ({
                     placeholder={placeholder}
                     name={key}
                     type={type}
-                    value={value || ""}
+                    value={formData[key] || ""}
                     required={required}
                     onChange={handleChange}
                     error={!!errors[key]}
@@ -202,4 +152,4 @@ const BillingInfoForm = ({
   );
 };
 
-export default BillingInfoForm;
+export default BasicDetailsForm;
