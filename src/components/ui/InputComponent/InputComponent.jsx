@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Select,
@@ -12,7 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import InfoLabel from "../DataInfo/InfoLabel";
-
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import PasswordComponent from "./PasswordComponent";
 const InputComponent = ({
   label,
   type,
@@ -28,6 +30,8 @@ const InputComponent = ({
   restrictPreviousDate = false, //for date
   options = [{ label: "Subsidiary", value: "subsidiary" }], //for select and multiselect only
   showCountryCode = true, // for the optional country code field,
+  sx = {},
+  ...rest
 }) => {
   // "& input[type='number']::-webkit-outer-spin-button, & input[type='number']::-webkit-inner-spin-button": {
   //     WebkitAppearance: "none", // For Webkit browsers like Chrome, Safari
@@ -73,6 +77,19 @@ const InputComponent = ({
       case "bharat":
         return "hello";
         break;
+      case "password":
+        return (
+          <PasswordComponent
+            label={label}
+            type={type}
+            placeholder={placeholder}
+            onChange={onChange}
+            required={required}
+            value={value}
+            name={name}
+            sx={sx}
+          />
+        );
       case "number":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -84,7 +101,7 @@ const InputComponent = ({
             </label>
 
             {/* Country Code and Phone Number Inputs */}
-            <Box sx={{ display: "flex", gap: "8px" }}>
+            <Box sx={{ display: "flex", gap: "8px", ...sx }}>
               <TextField
                 id={name}
                 name={name}
@@ -123,7 +140,9 @@ const InputComponent = ({
         );
       case "phone":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             <label
               htmlFor={name}
               style={{ fontSize: "16px", color: "#202020", fontWeight: "400" }}
@@ -203,6 +222,7 @@ const InputComponent = ({
               display: "flex",
               flexDirection: "column",
               gap: "8px",
+              ...sx,
             }}
           >
             <label
@@ -243,6 +263,7 @@ const InputComponent = ({
               display: "flex",
               flexDirection: "column",
               gap: "8px",
+              ...sx,
             }}
           >
             <label
@@ -279,7 +300,9 @@ const InputComponent = ({
         );
       case "percentage":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             <label
               htmlFor={name}
               style={{ fontSize: "16px", color: "#202020", fontWeight: "400" }}
@@ -323,7 +346,9 @@ const InputComponent = ({
         );
       case "date":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             <label
               htmlFor={name}
               style={{ fontSize: "16px", color: "#202020", fontWeight: "400" }}
@@ -377,7 +402,9 @@ const InputComponent = ({
         );
       case "select":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             <label
               htmlFor={name}
               style={{ fontSize: "16px", color: "#202020", fontWeight: "400" }}
@@ -411,7 +438,9 @@ const InputComponent = ({
         );
       case "checkbox":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             {label && (
               <label
                 htmlFor={name}
@@ -461,6 +490,7 @@ const InputComponent = ({
               flexDirection: "column",
               gap: "8px",
               marginY: "16px",
+              ...sx,
             }}
           >
             {label && (
@@ -484,7 +514,9 @@ const InputComponent = ({
 
       case "textArea":
         return (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "8px", ...sx }}
+          >
             <label
               htmlFor={"textArea"}
               style={{ fontSize: "16px", color: "#202020", fontWeight: "400" }}
@@ -527,6 +559,7 @@ const InputComponent = ({
               padding: "10px",
               borderRadius: "4px",
               fontSize: "16px",
+              ...sx,
             }}
           />
         );

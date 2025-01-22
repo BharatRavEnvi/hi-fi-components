@@ -1,24 +1,23 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import CustomBadge from "../CustomBadge/CustomBadge";
-import { number } from "zod";
 
-const InternalStepper = ({
+const GrayStepper = ({
   status,
   text,
-  variant = "green",
+  variant = "gray",
   step = 0,
   onClick,
-
   ...rest
 }) => {
-  // 3 status-> active, completed or inactive
-
   const isActive = status === "active";
   const isCompleted = status === "completed";
+  const isInactive = status === "inactive";
+
   const handleClick = (e) => {
     if (onClick) onClick(e);
   };
+
   const lightVariant = {
     active: {
       border: "2px solid #65BA74",
@@ -26,16 +25,17 @@ const InternalStepper = ({
       badgeColor: "#65BA74",
     },
     completed: {
-      border: "2px solid #cecece",
+      border: "2px solid #A5ABB5",
       textColor: "#A5ABB5",
       badgeColor: "#A5ABB5",
     },
     inactive: {
-      border: "2px solid #cecece",
+      border: "2px solid #A5ABB5",
       textColor: "#A5ABB5",
       badgeColor: "#A5ABB5",
     },
   };
+
   const darkVariant = {
     active: {
       border: "2px solid #F6F7F8",
@@ -55,11 +55,13 @@ const InternalStepper = ({
   };
 
   const styles = variant === "light" ? lightVariant : darkVariant;
+
   const currentStyles = isActive
     ? styles.active
     : isCompleted
       ? styles.completed
       : styles.inactive;
+
   return (
     <Box
       onClick={handleClick}
@@ -70,7 +72,7 @@ const InternalStepper = ({
         justifyContent: "flex-start",
         alignItems: "center",
         padding: "0.5rem 2rem",
-        border: isActive ? `2px solid #65BA74` : "2px solid transparent",
+        border: currentStyles.border,
         borderRadius: "1rem",
         "&:hover": {
           border: `2px solid ${currentStyles.border}`,
@@ -80,15 +82,21 @@ const InternalStepper = ({
         minWidth: "200px",
       }}
     >
-      <CustomBadge status={status} step={step} />
+      <CustomBadge
+        status={status}
+        step={step}
+        badgeColor={currentStyles.badgeColor}
+      />
       <Typography
         variant='p'
         component={"p"}
         sx={{
           fontSize: "1rem",
           lineHeight: "22px",
-          color: isActive ? "#203C25" : "#646464",
-          textWrap: "nowrap",
+          color: currentStyles.textColor,
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
         }}
       >
         {text}
@@ -97,4 +105,4 @@ const InternalStepper = ({
   );
 };
 
-export default InternalStepper;
+export default GrayStepper;

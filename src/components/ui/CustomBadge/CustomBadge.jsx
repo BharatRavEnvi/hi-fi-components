@@ -1,7 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import CheckIcon from "@mui/icons-material/Check";
-const CustomBadge = ({ status, step = 0 }) => {
+const CustomBadge = ({
+  status,
+  step = 0,
+  children,
+  sx = {},
+  badgeColor,
+  ...rest
+}) => {
   //status-> completed, active,inactive
   let badgeStyles = {};
   let textStyles = {};
@@ -9,7 +16,7 @@ const CustomBadge = ({ status, step = 0 }) => {
 
   if (status === "completed") {
     badgeStyles = {
-      backgroundColor: "#cecece", //gray
+      backgroundColor: badgeColor ? badgeColor : "#cecece", //gray
       color: "#646464", //dark gray
     };
     content = <CheckIcon sx={{ fontSize: "1.2rem" }} />;
@@ -36,9 +43,13 @@ const CustomBadge = ({ status, step = 0 }) => {
         borderRadius: "50%",
         padding: "0.5rem",
         ...badgeStyles,
+        ...sx,
       }}
+      {...rest}
     >
-      {status === "completed" ? (
+      {children ? (
+        children
+      ) : status === "completed" ? (
         content
       ) : (
         <Typography sx={{ fontSize: "1rem", ...textStyles }}>
