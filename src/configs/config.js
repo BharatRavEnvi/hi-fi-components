@@ -175,6 +175,12 @@ const basicDetailsFormConfig = [
     type: "text",
   },
   {
+    label: "Number of Employees",
+    key: "numberOfEmployees",
+    placeholder: "250",
+    type: "number",
+  },
+  {
     label: "Employment Types",
     key: "employmentType",
     placeholder: "Full Time, Part Time",

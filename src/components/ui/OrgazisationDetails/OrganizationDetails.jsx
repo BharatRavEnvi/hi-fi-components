@@ -24,7 +24,7 @@ import ContactInfoForm from "../../forms/organizationDetails/ContactInfoForm";
 import BasicDetailsForm from "../../forms/organizationDetails/BasicDetailsForm";
 const OrganizationDetails = () => {
   const [selectedTab, setSelectedTab] = useState(1);
-  const [selectedInfoTab, setSelectedInfoTab] = useState(0);
+  const [selectedInfoTab, setSelectedInfoTab] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [basicDFD, setBasicDFD] = useState({
     organizationLegalName: "",
@@ -124,6 +124,7 @@ const OrganizationDetails = () => {
     );
 
     if (idx <= activeStepIndex || (activeStepIndex === -1 && idx === 0)) {
+      setSelectedInfoTab(idx);
       setSelectedTab(idx);
       const orgCopy = [...orgSteps];
 
@@ -150,6 +151,7 @@ const OrganizationDetails = () => {
       setSelectedTab(selectedTab + 1);
     } else if (selectedTab < orgSteps?.length) {
       setSelectedTab(selectedTab + 1);
+      setSelectedInfoTab(selectedTab + 1); //Note: Remove this condition based on real data, for static form data handling im using this condition
     } else {
       alert("Can not do an action");
     }
@@ -252,7 +254,8 @@ const OrganizationDetails = () => {
       {selectedTab !== orgSteps?.length && (
         <CustomBox
           sx={{
-            maxWidth: "96%",
+            maxWidth: "100%",
+            width: "100%",
             flexDirection: "row",
             gap: "2rem",
           }}
@@ -279,7 +282,9 @@ const OrganizationDetails = () => {
                   text={orgStep?.label}
                   step={idx + 1}
                   key={idx}
-                  onClick={() => handleStepClick(idx)}
+                  onClick={() => {
+                    handleStepClick(idx);
+                  }}
                 />
               );
             })}

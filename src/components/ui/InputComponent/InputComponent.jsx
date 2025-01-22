@@ -392,6 +392,8 @@ const InputComponent = ({
                 value={value || ""}
                 onChange={onChange}
                 required={required}
+                displayEmpty
+                placeholder='select one'
               >
                 {options.length === 0 && (
                   <MenuItem disabled value=''>

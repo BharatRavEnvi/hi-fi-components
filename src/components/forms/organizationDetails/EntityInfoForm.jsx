@@ -76,12 +76,12 @@ const EntityInfoForm = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        overflowY: "scroll",
+        // overflowY: "scroll",
         //used css from chatgpt below css
         overflowY: "auto", // Initially allow scrolling
         "&:hover": {
           overflowY: "scroll", // Show scrollbar when user hovers
-          scrollbarWidth: "none", //todo: make thin while on prod thin
+          scrollbarWidth: "thin", //todo: make thin while on prod thin
         },
         "::-webkit-scrollbar": {
           display: "none", // Hide scrollbar initially
